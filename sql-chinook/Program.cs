@@ -11,15 +11,18 @@ namespace sql_chinook
             var invoiceQuery = new InvoiceQuery();
             var employeeInvoices = invoiceQuery.GetInvoicesBySalesAgent();
 
-
-
             var agentGroups = from employee in employeeInvoices
-                              group employee by employee.EmployeeFullName;
+                              group employee.InvoiceId by employee.EmployeeFullName into a
+                              select new { agent = a.Key, invoices = a.ToList() };
 
             foreach (var agent in agentGroups)
             { 
 
-                    Console.WriteLine($"{agent.ToString()}");
+                Console.WriteLine($"Invoices for: {agent.agent}");
+                foreach (int invoice in agent.invoices)
+                {
+                    Console.WriteLine($"{invoice} ");
+                }
 
 
             }
