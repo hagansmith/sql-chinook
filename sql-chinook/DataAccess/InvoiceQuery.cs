@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using sql_chinook.DataAccess.Models;
 
@@ -23,11 +24,6 @@ namespace sql_chinook.DataAccess
                                         from Customer
                                    join Invoice on Customer.CustomerId = Invoice.InvoiceId
                                    join Employee on Customer.SupportRepId = Employee.EmployeeId";
-
-
-                //var firstLetterParam = new SqlParameter("@FirstLetter", SqlDbType.NVarChar);
-                //firstLetterParam.Value = firstCharacter;
-                //cmd.Parameters.Add(firstLetterParam);
 
                 var reader = cmd.ExecuteReader();
 
@@ -65,11 +61,6 @@ namespace sql_chinook.DataAccess
                                     join Invoice on Customer.CustomerId = Invoice.InvoiceId
                                     join Employee on Customer.SupportRepId = Employee.EmployeeId";
 
-
-                //var firstLetterParam = new SqlParameter("@FirstLetter", SqlDbType.NVarChar);
-                //firstLetterParam.Value = firstCharacter;
-                //cmd.Parameters.Add(firstLetterParam);
-
                 var reader = cmd.ExecuteReader();
 
                 var invoicesDetail = new List<Invoice>();
@@ -94,10 +85,33 @@ namespace sql_chinook.DataAccess
         }
 
 
+        public int InvoiceLineItemCount( int number)
+        {
+            //Looking at the InvoiceLine table, provide a query that COUNTs the number of line items 
+            //for an Invoice with a parameterized Id from user input
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                var cmd = connection.CreateCommand();
+                cmd.CommandText = @"SELECT COUNT(*) as 'Line Items'
+                                    FROM [dbo].[InvoiceLine] i
+                                    WHERE i.InvoiceId = @InvoiceID
+                                    GROUP BY i.InvoiceId";
 
 
-        //Looking at the InvoiceLine table, provide a query that COUNTs the number of line items 
-        //for an Invoice with a parameterized Id from user input
+                var invoiceIdParam = new SqlParameter("@InvoiceID", SqlDbType.NVarChar);
+                invoiceIdParam.Value = number;
+                cmd.Parameters.Add(invoiceIdParam);
+
+                var reader = cmd.ExecuteScalar();
+
+                return int.Parse(reader.ToString());
+            }
+        }
+
+
+
         //hint, this will use ExecuteScalar
 
         //INSERT a new invoice with parameters for customerid and billing address

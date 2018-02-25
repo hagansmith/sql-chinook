@@ -9,9 +9,9 @@ namespace sql_chinook
         static void Main(string[] args)
         {
             var invoiceQuery = new InvoiceQuery();
-            //var employeeInvoices = invoiceQuery.GetInvoicesBySalesAgent();
-            var invoiceDetail = invoiceQuery.GetInvoiceDetail();
 
+            // -- Invoices By Agent -- //
+            //var employeeInvoices = invoiceQuery.GetInvoicesBySalesAgent();
             //var agentGroups = from employee in employeeInvoices
             //                  group employee.InvoiceId by employee.EmployeeFullName into a
             //                  select new { agent = a.Key, invoices = a.ToList() };
@@ -24,14 +24,23 @@ namespace sql_chinook
             //    {
             //        Console.WriteLine($"{invoice} ");
             //    }
-
-
             //}
+            // -------------------- //
 
-            foreach (var invoice in invoiceDetail)
-            {
-                Console.WriteLine($"{invoice.InvoiceId} - {invoice.Total}: {invoice.CustomerName} Agent: {invoice.EmployeeFullName}");
-            }
+            // -- Invoice Detail -- //
+            //var invoiceDetail = invoiceQuery.GetInvoiceDetail();
+            //foreach (var invoice in invoiceDetail)
+            //{
+            //    Console.WriteLine($"{invoice.InvoiceId} - {invoice.Total}: {invoice.CustomerName}, Agent: {invoice.EmployeeFullName}");
+            //}
+            // ------------------- //
+
+            // -- Invoice Line Item Count -- //
+            Console.WriteLine("Enter an invoice id for lookup");
+            var number = int.Parse(Console.ReadLine());
+            var invoiceLineItemCount = invoiceQuery.InvoiceLineItemCount(number);
+            Console.WriteLine($"Line items in invoice {number}: {invoiceLineItemCount}");
+            // ---------------------------- //
 
             Console.ReadKey();
         }
