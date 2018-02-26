@@ -109,15 +109,5 @@ namespace sql_chinook.DataAccess
                 return int.Parse(reader.ToString());
             }
         }
-
-
-
-        //hint, this will use ExecuteScalar
-
-        //INSERT a new invoice with parameters for customerid and billing address
-
-        //UPDATE an Employee's name with a parameter for Employee Id and new name
-
-
     }
 }
