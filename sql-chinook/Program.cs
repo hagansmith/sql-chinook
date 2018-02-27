@@ -9,12 +9,14 @@ namespace sql_chinook
         static void Main(string[] args)
         {
             var invoiceQuery = new InvoiceQuery();
+            var modifyInvoice = new InvoiceModifier();
 
             Console.WriteLine("Please make a selection");
             Console.WriteLine("1: Invoice Listing By Agent\n" +
                               "2: Invoice Detail Listing\n" +
                               "3: Invoice Lineitem Count by Invoice Id\n" +
-                              "4: Add New Invoice");
+                              "4: Add New Invoice\n" +
+                              "5: Update Employee Name");
 
             var input = int.Parse(Console.ReadLine());
 
@@ -81,8 +83,18 @@ namespace sql_chinook
                 Console.WriteLine("Enter Customer Invoice Total");
                 var invoiceTotal = double.Parse(Console.ReadLine());
 
-                var newInvoice = new InvoiceModifier();
-                newInvoice.NewInvoice(custId, billingAddr, billingCity, billingState, billingCountry, billingPost, invoiceTotal);
+                modifyInvoice.NewInvoice(custId, billingAddr, billingCity, billingState, billingCountry, billingPost, invoiceTotal);
+            }
+            else if (input == 5)
+            {
+                Console.WriteLine("Enter Employee Id");
+                var empId = int.Parse(Console.ReadLine());
+                Console.WriteLine("Enter Updated First Name");
+                var fName = Console.ReadLine();
+                Console.WriteLine("Enter Updated Last Name");
+                var lName = Console.ReadLine();
+
+                modifyInvoice.updateEmployee(empId, fName, lName);
             }
             else
             {

@@ -76,5 +76,37 @@ namespace sql_chinook.DataAccess
                 return result == 1;
             }
         }
+
+        //UPDATE an Employee's name with a parameter for Employee Id and new name
+        public bool updateEmployee(int empId, string fName, string lName)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var cmd = connection.CreateCommand();
+                cmd.CommandText = @"UPDATE [dbo].[Employee]
+                                       SET [LastName] = @lastName
+                                          ,[FirstName] = @firstName
+                                     WHERE Employee.EmployeeId = @employeeId";
+
+                var employeeIdParam = new SqlParameter("@employeeId", System.Data.SqlDbType.Int);
+                employeeIdParam.Value = empId;
+                cmd.Parameters.Add(employeeIdParam);
+
+                var fisrtNameParam = new SqlParameter("@firstName", System.Data.SqlDbType.NVarChar);
+                fisrtNameParam.Value = fName;
+                cmd.Parameters.Add(fisrtNameParam);
+
+                var lastNameParam = new SqlParameter("@lastName", System.Data.SqlDbType.NVarChar);
+                lastNameParam.Value = lName;
+                cmd.Parameters.Add(lastNameParam);
+
+                connection.Open();
+
+                var result = cmd.ExecuteNonQuery();
+
+                return result == 1;
+            }
+        }
     }
 }
+
