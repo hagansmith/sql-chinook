@@ -13,14 +13,13 @@ namespace sql_chinook.DataAccess
         readonly string _connectionString = ConfigurationManager.ConnectionStrings["Chinook"].ConnectionString;
        
         //INSERT a new invoice with parameters for customerid and billing address
-        public bool NewInvoice (int custId, string billingAddr)
+        public bool NewInvoice (int custId, string billingAddr, string billingCity, string billingState, string billingCountry, string billingPost, double invoiceTotal )
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 var cmd = connection.CreateCommand();
                 cmd.CommandText = @"INSERT INTO [dbo].[Invoice]
-                                               ([InvoiceId]
-                                               ,[CustomerId]
+                                               ([CustomerId]
                                                ,[InvoiceDate]
                                                ,[BillingAddress]
                                                ,[BillingCity]
@@ -29,24 +28,46 @@ namespace sql_chinook.DataAccess
                                                ,[BillingPostalCode]
                                                ,[Total])
                                     VALUES
-                                                (<InvoiceId, int,>
-                                                ,<CustomerId, int,>
-                                                ,<InvoiceDate, datetime,>
-                                                ,<BillingAddress, nvarchar(70),>
-                                                ,<BillingCity, nvarchar(40),>
-                                                ,<BillingState, nvarchar(40),>
-                                                ,<BillingCountry, nvarchar(40),>
-                                                ,<BillingPostalCode, nvarchar(10),>
-                                                ,<Total, numeric(10,2),>)";
+                                                (@customerId
+                                                ,@date
+                                                ,@billingAddr
+                                                ,@billingCity
+                                                ,@billingState
+                                                ,@billingCountry
+                                                ,@billingPostal
+                                                ,@invoiceTotal)";
 
                 var customerIdParam = new SqlParameter("@customerId", System.Data.SqlDbType.Int);
                 customerIdParam.Value = custId;
                 cmd.Parameters.Add(customerIdParam);
 
-                var billingAddress = new SqlParameter("@billingAddr", System.Data.SqlDbType.NVarChar);
-                // will need to parse address into values
-                billingAddress.Value = billingAddr;
-                cmd.Parameters.Add(customerIdParam);
+                var dateParam = new SqlParameter("@date", System.Data.SqlDbType.Date);
+                dateParam.Value = "2009 - 01 - 02 00:00:00.000";
+                cmd.Parameters.Add(dateParam);
+
+                var billingAddressParam = new SqlParameter("@billingAddr", System.Data.SqlDbType.NVarChar);
+                billingAddressParam.Value = billingAddr;
+                cmd.Parameters.Add(billingAddressParam);
+
+                var billingCityParam = new SqlParameter("@billingCity", System.Data.SqlDbType.NVarChar);
+                billingCityParam.Value = billingCity;
+                cmd.Parameters.Add(billingCityParam);
+
+                var billingStateParam = new SqlParameter("@billingState", System.Data.SqlDbType.NVarChar);
+                billingStateParam.Value = billingState;
+                cmd.Parameters.Add(billingStateParam);
+
+                var billingCountryParam = new SqlParameter("@billingCountry", System.Data.SqlDbType.NVarChar);
+                billingCountryParam.Value = billingCountry;
+                cmd.Parameters.Add(billingCountryParam);
+
+                var billingPostalParam = new SqlParameter("@billingPostal", System.Data.SqlDbType.NVarChar);
+                billingPostalParam.Value = billingPost;
+                cmd.Parameters.Add(billingPostalParam);
+
+                var invoiceTotalParam = new SqlParameter("@invoiceTotal", System.Data.SqlDbType.Decimal);
+                invoiceTotalParam.Value = invoiceTotal;
+                cmd.Parameters.Add(invoiceTotalParam);
 
                 connection.Open();
 

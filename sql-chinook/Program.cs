@@ -10,11 +10,12 @@ namespace sql_chinook
         {
             var invoiceQuery = new InvoiceQuery();
 
-
             Console.WriteLine("Please make a selection");
             Console.WriteLine("1: Invoice Listing By Agent\n" +
                               "2: Invoice Detail Listing\n" +
-                              "3: Invoice Lineitem Count by Invoice Id");
+                              "3: Invoice Lineitem Count by Invoice Id\n" +
+                              "4: Add New Invoice");
+
             var input = int.Parse(Console.ReadLine());
 
             if (input == 1)
@@ -55,6 +56,33 @@ namespace sql_chinook
                 var invoiceLineItemCount = invoiceQuery.InvoiceLineItemCount(number);
                 Console.WriteLine($"Line items in invoice {number}: {invoiceLineItemCount}");
                 // ---------------------------- //
+            }
+            else if (input == 4)
+            {
+                // -- Add New Invoice -- //
+                Console.WriteLine("Enter Customer ID");
+                var custId = int.Parse(Console.ReadLine());
+
+                Console.WriteLine("Enter Customer Billing Address");
+                var billingAddr = Console.ReadLine();
+
+                Console.WriteLine("Enter Customer Billing City");
+                var billingCity = Console.ReadLine();
+
+                Console.WriteLine("Enter Customer Billing State");
+                var billingState = Console.ReadLine();
+
+                Console.WriteLine("Enter Customer Billing Country");
+                var billingCountry = Console.ReadLine();
+
+                Console.WriteLine("Enter Customer Billing Postal Code");
+                var billingPost = Console.ReadLine();
+
+                Console.WriteLine("Enter Customer Invoice Total");
+                var invoiceTotal = double.Parse(Console.ReadLine());
+
+                var newInvoice = new InvoiceModifier();
+                newInvoice.NewInvoice(custId, billingAddr, billingCity, billingState, billingCountry, billingPost, invoiceTotal);
             }
             else
             {
